@@ -229,6 +229,13 @@ static CGFloat const kProgressViewSize = 50.0f;
   CGFloat xScale = boundsSize.width / imageSize.width;    // the scale needed to perfectly fit the image width-wise
   CGFloat yScale = boundsSize.height / imageSize.height;  // the scale needed to perfectly fit the image height-wise
   CGFloat minScale = MIN(xScale, yScale);                 // use minimum of these to allow the image to become fully visible
+  CGFloat maxScale = MAX(xScale, yScale);
+  //长图 放大宽度占满频幕   宽图低分辨率按高度占满屏幕 高分辨率放大1.5倍
+  if (xScale > yScale) {
+      maxScale = xScale;
+  } else {
+      maxScale = yScale > 1 ? yScale : yScale * 1.5;
+  }
 
 	// If image is smaller than the screen then ensure we show it at
 	// min scale of 1
@@ -237,12 +244,12 @@ static CGFloat const kProgressViewSize = 50.0f;
 	}
 
 	// Calculate Max
-	CGFloat maxScale = 4.0; // Allow double scale
+//	CGFloat maxScale = 4.0; // Allow double scale
   // on high resolution screens we have double the pixel density, so we will be seeing every pixel if we limit the
   // maximum zoom scale to 0.5.
-	if ([UIScreen instancesRespondToSelector:@selector(scale)]) {
-		maxScale = maxScale / [[UIScreen mainScreen] scale];
-	}
+//	if ([UIScreen instancesRespondToSelector:@selector(scale)]) {
+//		maxScale = maxScale / [[UIScreen mainScreen] scale];
+//	}
 
 	// Set
 	self.maximumZoomScale = maxScale;
